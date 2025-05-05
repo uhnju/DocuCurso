@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ejemplos de useReducer en React</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background: #f9f9f9;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 1rem;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Consolas, monospace;
+    }
+    .explicacion {
+      margin-bottom: 2rem;
+    }
+    a {
+      color: #007acc;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Ejemplo de <code>useReducer</code> en React</h1>
+
+  <div class="explicacion">
+    <h2>¿Qué es <code>useReducer</code>?</h2>
+    <p><code>useReducer</code> es una alternativa a <code>useState</code> para gestionar estados complejos o con múltiples transiciones. Es ideal cuando el estado depende de acciones específicas (como en Redux).</p>
+    <p><strong>Documentación oficial:</strong> <a href="https://react.dev/reference/react/useReducer" target="_blank">React Docs – useReducer</a></p>
+  </div>
+
+  <div class="explicacion">
+    <h2>Contador avanzado con useReducer</h2>
+    <p>Este ejemplo define un reducer que maneja tres acciones: <code>incrementar</code>, <code>decrementar</code> y <code>reiniciar</code>.</p>
+    <p>El estado es un objeto que contiene la propiedad <code>contador</code>. Cada botón envía una acción al reducer a través de <code>dispatch</code>.</p>
+    <pre><code class="language-tsx">// Reducer
+const reducerContador = (estado: { contador: number }, accion: { tipo: string }) =&gt; {
+  switch (accion.tipo) {
+    case "incrementar":
+      return { contador: estado.contador + 1 };
+    case "decrementar":
+      return { contador: estado.contador - 1 };
+    case "reiniciar":
+      return { contador: 0 };
+    default:
+      return estado;
+  }
+};
+
+// Componente
+const ContadorAvanzado = () =&gt; {
+  const [estado, dispatch] = useReducer(reducerContador, { contador: 0 });
+
+  return (
+    &lt;div&gt;
+      &lt;h3&gt;Contador avanzado&lt;/h3&gt;
+      &lt;p&gt;Contador: {estado.contador}&lt;/p&gt;
+      &lt;button onClick={() =&gt; dispatch({ tipo: "incrementar" })}&gt;+&lt;/button&gt;
+      &lt;button onClick={() =&gt; dispatch({ tipo: "decrementar" })}&gt;-&lt;/button&gt;
+      &lt;button onClick={() =&gt; dispatch({ tipo: "reiniciar" })}&gt;Reiniciar&lt;/button&gt;
+    &lt;/div&gt;
+  );
+};</code></pre>
+  </div>
+
+  <!-- Prism.js para coloreado -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js"></script>
+</body>
+</html>

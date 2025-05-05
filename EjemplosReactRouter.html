@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>React Router - Ejemplos prácticos</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; background: #f9f9f9; }
+    h1, h2 { color: #2c3e50; }
+    pre { background: #f4f4f4; padding: 1rem; border-radius: 5px; overflow-x: auto; }
+    .explicacion { margin-bottom: 2rem; }
+    a { color: #007acc; text-decoration: none; }
+    code { font-family: Consolas, monospace; }
+  </style>
+</head>
+<body>
+  <h1>React Router - Ejemplos prácticos</h1>
+
+  <div class="explicacion">
+    <h2>Navegación básica con <code>&lt;Link&gt;</code></h2>
+    <p><code>&lt;Link&gt;</code> permite navegar entre rutas sin recargar la página. Es equivalente a una etiqueta <code>&lt;a&gt;</code>, pero manejada por React Router.</p>
+    <pre><code class="language-tsx">&lt;Link to="/"&gt;Inicio&lt;/Link&gt;
+&lt;Link to="/EjemplosSintaxisJSX"&gt;SintaxisJSX&lt;/Link&gt;
+&lt;Link to="/EjemplosEventos"&gt;Eventos&lt;/Link&gt;</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Navegación programática con <code>useNavigate</code></h2>
+    <p>Permite cambiar de ruta mediante funciones, por ejemplo al hacer clic en un botón.</p>
+    <pre><code class="language-tsx">const navigate = useNavigate();
+
+&lt;button onClick={() =&gt; navigate("/")}&gt;Inicio&lt;/button&gt;
+&lt;button onClick={() =&gt; navigate(-1)}&gt;Atrás&lt;/button&gt;</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Mostrar la ruta actual con <code>useLocation</code></h2>
+    <p>Devuelve un objeto con información sobre la URL actual, como <code>pathname</code>, <code>search</code> y <code>state</code>.</p>
+    <pre><code class="language-tsx">const location = useLocation();
+return &lt;div&gt;Estás en la ruta: {location.pathname}&lt;/div&gt;;</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Leer parámetros de consulta con <code>useSearchParams</code></h2>
+    <p>Permite acceder a los <code>?param=value</code> de la URL.</p>
+    <pre><code class="language-tsx">const [searchParams] = useSearchParams();
+const filtro = searchParams.get("filtro");
+
+return &lt;p&gt;Buscar término: {filtro}&lt;/p&gt;;</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Leer parámetros de ruta con <code>useParams</code></h2>
+    <p>Utiliza los valores definidos en la ruta como <code>/user/:userId</code> para obtener datos dinámicos de la URL.</p>
+    <pre><code class="language-tsx">const { userId } = useParams();
+return &lt;div&gt;Perfil del Usuario con ID: {userId}&lt;/div&gt;;</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Navegar enviando datos (estado) con <code>navigate(..., { state })</code></h2>
+    <p>Permite enviar información entre componentes sin usar query params ni rutas dinámicas.</p>
+    <pre><code class="language-tsx">navigate("/NavegarRecibiendoEstado", {
+  state: { message: "Hola desde NavegarEnviandoEstado" }
+});</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Recibir estado desde navegación con <code>useLocation().state</code></h2>
+    <p>Se accede a los datos enviados mediante <code>navigate(..., { state })</code> usando <code>useLocation()</code>.</p>
+    <pre><code class="language-tsx">const location = useLocation();
+const state = location.state || {};
+
+return &lt;div&gt;Dato recibido: {state.message}&lt;/div&gt;;</code></pre>
+  </div>
+
+  <!-- Prism.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js"></script>
+</body>
+</html>

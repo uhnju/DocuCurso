@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ejemplos de localStorage en React</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; background: #f9f9f9; }
+    h1, h2 { color: #2c3e50; }
+    pre { background: #f4f4f4; padding: 1rem; border-radius: 5px; overflow-x: auto; }
+    .explicacion { margin-bottom: 2rem; }
+    a { color: #007acc; text-decoration: none; }
+    code { font-family: Consolas, monospace; }
+  </style>
+</head>
+<body>
+  <h1>Ejemplos de uso de <code>localStorage</code> en React</h1>
+
+  <div class="explicacion">
+    <h2>Guardar datos en localStorage</h2>
+    <p><code>localStorage.setItem</code> guarda información como texto. Aquí se guarda un nombre simple.</p>
+    <pre><code class="language-tsx">const guardar = () =&gt; {
+  localStorage.setItem("nombre", "Juan");
+  alert("Datos guardados en localStorage");
+};</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Leer datos desde localStorage</h2>
+    <p>Se accede a un valor con <code>localStorage.getItem</code>. Es necesario verificar si existe antes de usarlo.</p>
+    <pre><code class="language-tsx">const leer = () =&gt; {
+  const nombre = localStorage.getItem("nombre");
+  if (nombre) {
+    setNombre(nombre);
+  } else {
+    alert("No hay datos guardados");
+  }
+};</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Eliminar un ítem de localStorage</h2>
+    <p>Se usa <code>localStorage.removeItem</code> con la clave deseada.</p>
+    <pre><code class="language-tsx">localStorage.removeItem("nombre");</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Limpiar todo el localStorage</h2>
+    <p>Con <code>localStorage.clear()</code> se eliminan todas las claves almacenadas.</p>
+    <pre><code class="language-tsx">localStorage.clear();</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Sincronizar estado de React con localStorage</h2>
+    <p>Se inicializa el estado con lo que hay en localStorage y se actualiza en cada cambio usando <code>useEffect</code>.</p>
+    <pre><code class="language-tsx">const [nombre, setNombre] = useState(localStorage.getItem("nombre") || "");
+
+useEffect(() =&gt; {
+  localStorage.setItem("nombre", nombre);
+}, [nombre]);</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Guardar y leer objetos JSON</h2>
+    <p>Como <code>localStorage</code> solo almacena strings, se usan <code>JSON.stringify</code> y <code>JSON.parse</code> para guardar y leer objetos.</p>
+    <pre><code class="language-tsx">const [usuario, setUsuario] = useState(() =&gt; {
+  return JSON.parse(localStorage.getItem("usuario") || '{"nombre":"","edad":""}');
+});
+
+useEffect(() =&gt; {
+  localStorage.setItem("usuario", JSON.stringify(usuario));
+}, [usuario]);</code></pre>
+  </div>
+
+  <!-- Prism.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js"></script>
+</body>
+</html>

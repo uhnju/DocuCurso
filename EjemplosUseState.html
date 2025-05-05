@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ejemplos de useState en React</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background: #f9f9f9;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 1rem;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Consolas, monospace;
+    }
+    .explicacion {
+      margin-bottom: 2rem;
+    }
+    a {
+      color: #007acc;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Ejemplos de useState en React</h1>
+
+  <div class="explicacion">
+    <h2>Contador con paso configurable</h2>
+    <p><code>useState</code> te permite almacenar y actualizar el estado de componentes funcionales. Aquí se usa para manejar un contador y el valor de incremento.</p>
+    <p>Además, se ilustra cómo controlar inputs numéricos y usar condicionales de estilo.</p>
+    <p><strong>Documentación:</strong> <a href="https://react.dev/reference/react/useState" target="_blank">useState (React Docs)</a></p>
+    <pre><code class="language-tsx">const [contador, setContador] = useState(0);
+const [intervalo, setIntervalo] = useState(1);
+
+const incrementar = () =&gt; setContador(contador + intervalo);
+const decrementar = () =&gt; setContador(contador - intervalo);
+const inicializar = () =&gt; setContador(0);
+
+return (
+  &lt;div&gt;
+    &lt;p style={{ color: contador &gt; 10 ? "red" : "blue" }}&gt;Contador: {contador}&lt;/p&gt;
+    &lt;input type="number" value={intervalo} onChange={handleChange} /&gt;
+    &lt;button onClick={incrementar}&gt;Incrementar&lt;/button&gt;
+    &lt;button onClick={decrementar}&gt;Decrementar&lt;/button&gt;
+    &lt;button onClick={inicializar}&gt;Resetear&lt;/button&gt;
+  &lt;/div&gt;
+);</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Estado booleano y visibilidad</h2>
+    <p>Este patrón es útil para mostrar u ocultar contenido con un botón. El estado booleano cambia con cada clic usando <code>!estado</code>.</p>
+    <pre><code class="language-tsx">const [visible, setVisible] = useState(true);
+
+return (
+  &lt;div&gt;
+    &lt;button onClick={() =&gt; setVisible(!visible)}&gt;
+      {visible ? "Ocultar" : "Mostrar"}
+    &lt;/button&gt;
+    {visible &amp;&amp; &lt;p&gt;Este contenido es visible pero puede ocultarse&lt;/p&gt;}
+  &lt;/div&gt;
+);</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Manejo de arrays con useState</h2>
+    <p>Para manejar listas dinámicas, puedes usar arrays en estado. Al agregar elementos, usa el spread operator <code>[...array, nuevo]</code> para mantener la inmutabilidad.</p>
+    <pre><code class="language-tsx">const [elementos, setElementos] = useState&lt;string[]&gt;([]);
+
+const agregarElemento = () =&gt; {
+  const nuevoElemento = `Elemento ${elementos.length + 1}`;
+  setElementos([...elementos, nuevoElemento]);
+};
+
+return (
+  &lt;div&gt;
+    &lt;button onClick={agregarElemento}&gt;Agregar Elemento&lt;/button&gt;
+    &lt;ul&gt;
+      {elementos.map((el, i) =&gt; &lt;li key={i}&gt;{el}&lt;/li&gt;)}
+    &lt;/ul&gt;
+  &lt;/div&gt;
+);</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Manejo de objetos como estado</h2>
+    <p>Para estados más complejos como formularios, se usa un objeto. Recuerda usar <code>...spread</code> para mantener el resto de propiedades sin sobrescribirlas.</p>
+    <p>Este ejemplo muestra cómo manejar múltiples campos y hacer un envío simulado con <code>alert</code>.</p>
+    <pre><code class="language-tsx">const [persona, setPersona] = useState({ nombre: "", edad: 0 });
+
+const actualizarNombre = (e) =&gt; setPersona({ ...persona, nombre: e.target.value });
+const actualizarEdad = (e) =&gt; setPersona({ ...persona, edad: parseInt(e.target.value) });
+
+const handleSubmit = (e) =&gt; {
+  e.preventDefault();
+  alert(JSON.stringify(persona));
+};
+
+return (
+  &lt;form onSubmit={handleSubmit}&gt;
+    &lt;label&gt;
+      Nombre: &lt;input value={persona.nombre} onChange={actualizarNombre} /&gt;
+    &lt;/label&gt;&lt;br /&gt;
+    &lt;label&gt;
+      Edad: &lt;input type="number" value={persona.edad} onChange={actualizarEdad} /&gt;
+    &lt;/label&gt;
+    &lt;button type="submit"&gt;Enviar&lt;/button&gt;
+  &lt;/form&gt;
+);</code></pre>
+  </div>
+
+  <!-- Prism para coloreado de TypeScript/JSX -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js"></script>
+</body>
+</html>

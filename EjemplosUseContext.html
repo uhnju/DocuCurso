@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>useContext con múltiples contextos en React</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background: #f9f9f9;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 1rem;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Consolas, monospace;
+    }
+    .explicacion {
+      margin-bottom: 2rem;
+    }
+    a {
+      color: #007acc;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Ejemplos de <code>useContext</code> en React</h1>
+
+  <div class="explicacion">
+    <h2>¿Qué es <code>useContext</code>?</h2>
+    <p><code>useContext</code> permite consumir datos de un contexto global en cualquier componente, evitando el "prop drilling". Ideal para compartir estado como usuario, tema, permisos o contadores globales.</p>
+    <p><strong>Documentación:</strong> <a href="https://react.dev/reference/react/useContext" target="_blank">React Docs – useContext</a></p>
+  </div>
+
+  <div class="explicacion">
+    <h2>Contexto: UsuarioContexto</h2>
+    <p>Define información del usuario que se puede acceder globalmente desde cualquier componente.</p>
+    <pre><code class="language-tsx">interface Usuario {
+  NIF: string;
+  Nombre: string;
+  Comunidad: string;
+  Ciudad: string;
+}
+
+export const UsuarioContexto = createContext&lt;Usuario | null&gt;(null);
+
+export const UsuarioContextoProvider = ({ children }) =&gt; {
+  const usuario = {
+    NIF: "1234578A",
+    Nombre: "Alberto Garcia",
+    Comunidad: "Madrid",
+    Ciudad: "Arganda"
+  };
+
+  return (
+    &lt;UsuarioContexto.Provider value={usuario}&gt;
+      {children}
+    &lt;/UsuarioContexto.Provider&gt;
+  );
+};</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Contexto: ContadorContexto (con <code>localStorage</code>)</h2>
+    <p>Este contexto comparte un contador entre varios componentes, con persistencia automática usando <code>localStorage</code>.</p>
+    <pre><code class="language-tsx">interface ContadorContexto {
+  contador: number;
+  setContador: (valor: number) =&gt; void;
+}
+
+export const ContadorContexto = createContext&lt;ContadorContexto&gt;({
+  contador: 0,
+  setContador: () =&gt; {},
+});
+
+export const ContadorContextoProvider = ({ children }) =&gt; {
+  const [contador, setContador] = useState(() =&gt; {
+    const guardado = localStorage.getItem("contador");
+    return guardado ? parseInt(guardado, 10) : 10;
+  });
+
+  useEffect(() =&gt; {
+    localStorage.setItem("contador", contador.toString());
+  }, [contador]);
+
+  return (
+    &lt;ContadorContexto.Provider value={{ contador, setContador }}&gt;
+      {children}
+    &lt;/ContadorContexto.Provider&gt;
+  );
+};</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Consumidor: ComponenteContador</h2>
+    <p>Este componente accede al contexto del contador para mostrarlo y modificarlo desde varios lugares a la vez.</p>
+    <pre><code class="language-tsx">const { contador, setContador } = useContext(ContadorContexto);
+
+return (
+  &lt;div&gt;
+    &lt;p&gt;Contador: {contador}&lt;/p&gt;
+    &lt;button onClick={() =&gt; setContador(contador + 1)}&gt;Incrementar&lt;/button&gt;
+  &lt;/div&gt;
+);</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Consumidor principal: EjemplosUseContext</h2>
+    <p>Este componente consume tanto el contexto del usuario como el del contador y los muestra en pantalla. También renderiza múltiples instancias del contador que comparten estado.</p>
+    <pre><code class="language-tsx">const { contexto } = useContext(SpaditContexto);
+const usuario = useContext(UsuarioContexto);
+
+return (
+  &lt;&gt;
+    &lt;h1&gt;Ejemplos de useContext&lt;/h1&gt;
+    &lt;h4&gt;Objeto SpaditContexto:&lt;/h4&gt;
+    &lt;pre&gt;{JSON.stringify(contexto, null, 2)}&lt;/pre&gt;
+
+    &lt;h4&gt;Objeto Usuario:&lt;/h4&gt;
+    &lt;pre&gt;{JSON.stringify(usuario, null, 2)}&lt;/pre&gt;
+
+    &lt;ComponenteContador /&gt;
+    &lt;ComponenteContador /&gt;
+  &lt;/&gt;
+);</code></pre>
+  </div>
+
+  <!-- Prism para colores -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js"></script>
+</body>
+</html>

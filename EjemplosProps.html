@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Uso de Props en React</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background: #f9f9f9;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 1rem;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Consolas, monospace;
+    }
+    .explicacion {
+      margin-bottom: 2rem;
+    }
+    a {
+      color: #007acc;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Ejemplos de Uso de Props en React</h1>
+
+  <div class="explicacion">
+    <h2>Componente simple con props</h2>
+    <p>Los <strong>props</strong> permiten pasar datos a componentes. Aquí vemos cómo recibir props como <code>nombre</code>, <code>numero</code> y <code>children</code>. Se usan valores por defecto y renderizado condicional para mayor control.</p>
+    <p><strong>Más información:</strong> <a href="https://react.dev/learn/passing-props-to-a-component" target="_blank">Pasar props en React</a></p>
+    <pre><code class="language-tsx">interface SaludoProps {
+  nombre?: string;
+  numero?: number;
+  visible?: boolean;
+  children?: React.ReactNode;
+}
+
+const Saludo = ({
+  nombre = "usuario desconocido",
+  numero,
+  visible = true,
+  children
+}: SaludoProps) =&gt; {
+  if (!visible) return &lt;p&gt;Saludo no visible&lt;/p&gt;;
+
+  return (
+    &lt;&gt;
+      &lt;p&gt;¡Hola, {nombre}!&lt;/p&gt;
+      {numero || numero === 0 ? &lt;p&gt;Tu número es: {numero}&lt;/p&gt; : null}
+      &lt;p&gt;{children}&lt;/p&gt;
+    &lt;/&gt;
+  );
+};</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Componente que recibe prop de tipo objeto</h2>
+    <p>Puedes pasar objetos completos como props. Es útil cuando el componente necesita múltiples propiedades agrupadas en un solo objeto.</p>
+    <pre><code class="language-tsx">interface Usuario {
+  nombre: string;
+  email: string;
+}
+
+interface InfoUsuarioProps {
+  usuario: Usuario;
+}
+
+const InfoUsuario = ({ usuario }: InfoUsuarioProps) =&gt; {
+  return (
+    &lt;p&gt;Usuario: {usuario.nombre}. Email: {usuario.email}&lt;/p&gt;
+  );
+};</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Botón reutilizable con estilo por defecto</h2>
+    <p>Un componente de botón que aplica un estilo base y acepta props adicionales. Ideal para reutilizar con diferentes contenidos o eventos.</p>
+    <pre><code class="language-tsx">interface BotonAzulProps {
+  children: React.ReactNode;
+  style?: React.CSSProperties;
+  [key: string]: any;
+}
+
+const BotonAzul = ({ children, style = {}, ...props }: BotonAzulProps) =&gt; {
+  return (
+    &lt;button
+      style={{ backgroundColor: "#0077FF", color: "#FFFFFF", ...style }}
+      {...props}
+    &gt;
+      {children}
+    &lt;/button&gt;
+  );
+};</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Uso de componente externo</h2>
+    <p>Este ejemplo muestra cómo usar componentes de una librería externa (como <code>@dit/spad-rdit_library</code>). Estas librerías definen sus propias props, como <code>variant</code>, <code>size</code> y <code>onClick</code>.</p>
+    <pre><code class="language-tsx">&lt;Button
+  size="sm"
+  variant="danger"
+  onClick={() =&gt; alert("Evento onClick")}
+  style={{ margin: "10px" }}
+&gt;
+  Button danger
+&lt;/Button&gt;</code></pre>
+  </div>
+
+  <!-- Prism core and language components -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js"></script>
+</body>
+</html>

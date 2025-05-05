@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ejemplos de useEffect en React</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background: #f9f9f9;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 1rem;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    .explicacion {
+      margin-bottom: 2rem;
+    }
+    a {
+      color: #007acc;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Ejemplos de <code>useEffect</code> en React</h1>
+
+  <div class="explicacion">
+    <h2>Ejecutar al montar y desmontar el componente</h2>
+    <p>Al pasar un array vacío como segundo argumento, <code>useEffect</code> se ejecuta una vez al montar y su función de retorno se ejecuta al desmontar.</p>
+    <pre><code class="language-tsx">useEffect(() =&gt; {
+  console.log("El componente se ha montado.");
+  return () =&gt; console.log("El componente se ha desmontado.");
+}, []);</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Escuchar cambios de estado específicos</h2>
+    <p>Al incluir una variable en el array de dependencias, <code>useEffect</code> se ejecutará cada vez que esa variable cambie. Aquí se actualiza el título del documento.</p>
+    <pre><code class="language-tsx">const [contador, setContador] = useState(0);
+
+useEffect(() =&gt; {
+  console.log("El contador cambió:", contador);
+  document.title = `Clicks: ${contador}`;
+}, [contador]);</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Escuchar cambios y sincronizar con localStorage</h2>
+    <p>Se inicia el estado desde <code>localStorage</code> y luego se actualiza cada vez que el estado cambia, manteniendo sincronización persistente.</p>
+    <pre><code class="language-tsx">const [contador, setContador] = useState(() =&gt; {
+  const valorGuardado = localStorage.getItem("micontador");
+  return parseInt(valorGuardado || "0");
+});
+
+useEffect(() =&gt; {
+  localStorage.setItem("micontador", contador.toString());
+}, [contador]);</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Suscripción a eventos del navegador</h2>
+    <p><code>useEffect</code> también permite suscribirse y limpiar eventos del DOM, como aquí con <code>keydown</code>.</p>
+    <pre><code class="language-tsx">useEffect(() =&gt; {
+  const handleKeyDown = (e: KeyboardEvent) =&gt; {
+    console.log("Tecla presionada:", e.key);
+  };
+
+  window.addEventListener("keydown", handleKeyDown);
+  return () =&gt; window.removeEventListener("keydown", handleKeyDown);
+}, []);</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Hacer una petición a una API</h2>
+    <p>Se usa <code>useEffect</code> para lanzar una petición HTTP (con Axios) al montar el componente, y guardar los datos en el estado.</p>
+    <pre><code class="language-tsx">useEffect(() =&gt; {
+  const realizarPeticionGET = async () =&gt; {
+    const data = await axiosAPI.get(url, params);
+    setDatos(data);
+  };
+  realizarPeticionGET();
+}, []);</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Guardar texto en localStorage</h2>
+    <p>Este patrón es común para entradas de usuario persistentes. Se sincroniza el valor de un <code>textarea</code> con el almacenamiento local del navegador.</p>
+    <pre><code class="language-tsx">const [texto, setTexto] = useState(localStorage.getItem("texto") || "");
+
+useEffect(() =&gt; {
+  localStorage.setItem("texto", texto);
+}, [texto]);</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Temporizador con useEffect</h2>
+    <p>Se crea un <code>setInterval</code> que se limpia al desmontar el componente. Útil para contadores, cronómetros, etc.</p>
+    <pre><code class="language-tsx">const [tiempo, setTiempo] = useState(0);
+
+useEffect(() =&gt; {
+  const intervalo = setInterval(() =&gt; {
+    setTiempo((prev) =&gt; prev + 1);
+  }, 1000);
+
+  return () =&gt; clearInterval(intervalo);
+}, []);</code></pre>
+  </div>
+
+  <!-- Prism.js scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js"></script>
+</body>
+</html>

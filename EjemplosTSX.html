@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ejemplos TypeScript con React (TSX)</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; background: #f9f9f9; }
+    h1, h2 { color: #2c3e50; }
+    pre { background: #f4f4f4; padding: 1rem; border-radius: 5px; overflow-x: auto; }
+    code { font-family: Consolas, monospace; }
+    .explicacion { margin-bottom: 2rem; }
+    a { color: #007acc; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <h1>Ejemplos de TypeScript en Componentes React</h1>
+
+  <div class="explicacion">
+    <h2>1. Tipar props simples</h2>
+    <p>Se define una interfaz para las props que recibe el componente.</p>
+    <pre><code class="language-tsx">interface SaludoProps {
+  nombre: string;
+  edad: number;
+}
+
+const Saludo = ({ nombre, edad }: SaludoProps): JSX.Element =&gt; {
+  return &lt;p&gt;Hola, {nombre}. Tienes {edad} años.&lt;/p&gt;;
+};</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>2. Props opcionales</h2>
+    <p>El símbolo <code>?</code> indica que una prop es opcional.</p>
+    <pre><code class="language-tsx">interface AlertaProps {
+  mensaje?: string;
+}
+
+const Alerta = ({ mensaje }: AlertaProps): JSX.Element =&gt; {
+  return &lt;div&gt;{mensaje ? mensaje : "Sin mensaje."}&lt;/div&gt;;
+};</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>3. Tipar children con <code>React.ReactNode</code></h2>
+    <p>Se usa para representar cualquier contenido JSX que se pase dentro del componente.</p>
+    <pre><code class="language-tsx">interface TarjetaProps {
+  children: React.ReactNode;
+}
+
+const Tarjeta = ({ children }: TarjetaProps): JSX.Element =&gt; {
+  return &lt;div className="card"&gt;{children}&lt;/div&gt;;
+};</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>4. Retorno explícito como <code>JSX.Element</code></h2>
+    <p>Buena práctica para mayor claridad en funciones que retornan JSX.</p>
+    <pre><code class="language-tsx">const PieDePagina = (): JSX.Element =&gt; {
+  return &lt;footer&gt;Aquí va el pié&lt;/footer&gt;;
+};</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>5. Tipar arrays</h2>
+    <p>Se especifica que <code>elementos</code> es un array de <code>string</code>.</p>
+    <pre><code class="language-tsx">interface ListaProps {
+  elementos: string[];
+}
+
+const Lista = ({ elementos }: ListaProps): JSX.Element =&gt; {
+  return (
+    &lt;ul&gt;
+      {elementos.map((e, i) =&gt; &lt;li key={i}&gt;{e}&lt;/li&gt;)}
+    &lt;/ul&gt;
+  );
+};</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>6. Tipar eventos</h2>
+    <p>Los eventos tienen tipos específicos como <code>React.MouseEvent</code>.</p>
+    <pre><code class="language-tsx">const Boton = (): JSX.Element =&gt; {
+  const handleClick = (e: React.MouseEvent&lt;HTMLButtonElement&gt;) =&gt; {
+    console.log("Click detectado", e);
+  };
+
+  return &lt;button onClick={handleClick}&gt;Haz clic&lt;/button&gt;;
+};</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>7. Tipar objetos complejos</h2>
+    <p>Se usan varias interfaces anidadas para representar objetos estructurados.</p>
+    <pre><code class="language-tsx">interface Usuario {
+  id: number;
+  nombre: string;
+}
+
+interface PerfilProps {
+  usuario: Usuario;
+}
+
+const Perfil = ({ usuario }: PerfilProps): JSX.Element =&gt; {
+  return &lt;p&gt;ID: {usuario.id}, Nombre: {usuario.nombre}&lt;/p&gt;;
+};</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>8. Props genéricas</h2>
+    <p>Componentes genéricos permiten aceptar cualquier tipo <code>T</code>.</p>
+    <pre><code class="language-tsx">interface ElementoProps&lt;T&gt; {
+  valor: T;
+}
+
+const Elemento = &lt;T, &gt;({ valor }: ElementoProps&lt;T&gt;): JSX.Element =&gt; {
+  return &lt;div&gt;{JSON.stringify(valor)}&lt;/div&gt;;
+};</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>9. Tipar referencias con <code>useRef</code></h2>
+    <p>Especifica el tipo del elemento DOM referenciado.</p>
+    <pre><code class="language-tsx">const EnfocarInput = (): JSX.Element =&gt; {
+  const inputRef = useRef&lt;HTMLInputElement&gt;(null);
+  return &lt;input ref={inputRef} type="text" /&gt;;
+};</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>10. Tipar estado con <code>useState</code></h2>
+    <p>El tipo del estado se indica explícitamente para evitar inferencias incorrectas.</p>
+    <pre><code class="language-tsx">const Contador = (): JSX.Element =&gt; {
+  const [contador, setContador] = useState&lt;number&gt;(0);
+  return &lt;p&gt;Contador: {contador}&lt;/p&gt;;
+};</code></pre>
+  </div>
+
+  <!-- Prism.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js"></script>
+</body>
+</html>

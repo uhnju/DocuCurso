@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Consulta de Empleados - React + TypeScript</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; background: #f9f9f9; }
+    h1, h2, h3 { color: #2c3e50; }
+    pre { background: #f4f4f4; padding: 1rem; border-radius: 6px; overflow-x: auto; }
+    code[class*="language-"] { font-family: Consolas, monospace; }
+    .explicacion { margin-bottom: 2.5rem; }
+    a { color: #007acc; text-decoration: none; }
+    ul { margin-top: 0.5rem; }
+  </style>
+</head>
+<body>
+  <h1>Guía: <code>ConsultaEmpleados.tsx</code> paso a paso</h1>
+
+  <div class="explicacion">
+    <h2>🎯 Objetivo</h2>
+    <p>Crear un componente React con TypeScript que:</p>
+    <ul>
+      <li>Ofrezca un formulario de búsqueda de empleados.</li>
+      <li>Valide los campos antes de enviar.</li>
+      <li>Haga una petición GET con Axios.</li>
+      <li>Guarde criterios en <code>localStorage</code>.</li>
+      <li>Renderice los resultados en una tabla enlazable.</li>
+    </ul>
+  </div>
+
+  <div class="explicacion">
+    <h2>🧱 Paso 1: Definir tipos en <code>EmpleadosTypes.ts</code></h2>
+    <p>Usamos namespaces para organizar tipos relacionados. Esto mejora la escalabilidad del proyecto.</p>
+    <pre><code class="language-ts">export namespace EmpleadosTypes {
+
+	export interface RespuestaJSON {
+		status: string;
+		mensaje: string;
+		respuesta: Respuesta;
+	}
+
+	export interface Respuesta {
+		empleados: Empleado[];
+	}
+
+	export interface Empleado {
+		nif: string;
+		grupo: Grupo;
+		nivel: number;
+		nombre: string;
+	}
+
+	export enum Grupo {
+		A1 = "A1",
+		A2 = "A2",
+		C1 = "C1",
+		C2 = "C2",
+	}
+
+}</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>📋 Paso 2: Estructura de estados y referencias</h2>
+    <p>Utilizamos <code>useState</code> para los filtros y resultados. <code>useRef</code> permite enfocar el campo que contiene errores.</p>
+    <pre><code class="language-tsx">const [nif, setNif] = useState("");
+const [grupo, setGrupo] = useState("");
+const [nivel, setNivel] = useState&lt;number | ""&gt;("");
+const [nombre, setNombre] = useState("");
+const [empleados, setEmpleados] = useState&lt;EmpleadosTypes.Empleado[]&gt;([]);
+const [errorNif, setErrorNif] = useState("");
+const [errorNivel, setErrorNivel] = useState("");
+const [errorPeticion, setErrorPeticion] = useState("");
+
+const inputNifRef = useRef&lt;HTMLInputElement | null&gt;(null);
+const inputNivelRef = useRef&lt;HTMLInputElement | null&gt;(null);</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>✅ Paso 3: Validar filtros</h2>
+    <p>Antes de enviar la petición, validamos NIF con una función auxiliar y el rango del nivel:</p>
+    <pre><code class="language-tsx">if (nif !== "" &amp;&amp; !validaNif(nif)) {
+  setErrorNif("NIF inválido");
+  inputNifRef.current?.focus();
+  return;
+}
+
+if (nivel !== "" &amp;&amp; (isNaN(Number(nivel)) || nivel &lt; 10 || nivel &gt; 30)) {
+  setErrorNivel("Nivel fuera de rango (10 - 30)");
+  inputNivelRef.current?.focus();
+  return;
+}</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>🌐 Paso 4: Petición HTTP con Axios y guardado en localStorage</h2>
+    <p>Guardamos los criterios antes de hacer la petición y almacenamos los resultados.</p>
+    <pre><code class="language-tsx">const buscarEmpleados = async () =&gt; {
+  const filtros = { nif, grupo, nivel, nombre };
+  localStorage.setItem("consultaEmpleado", JSON.stringify(filtros));
+
+  try {
+    const data = await axiosAPI.get&lt;EmpleadosTypes.RespuestaJSON&gt;(urlEmpleados, filtros);
+    setEmpleados(data.respuesta.empleados);
+  } catch (err) {
+    setErrorPeticion("Error al recuperar los empleados");
+  }
+};</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>💡 Paso 5: Recuperar filtros del localStorage al montar</h2>
+    <p>Esto permite mantener filtros tras refrescar la página o navegar hacia atrás.</p>
+    <pre><code class="language-tsx">useEffect(() =&gt; {
+  const guardados = localStorage.getItem("consultaEmpleado");
+  if (guardados) {
+    const filtros = JSON.parse(guardados);
+    setNif(filtros.nif);
+    setGrupo(filtros.grupo);
+    setNivel(filtros.nivel);
+    setNombre(filtros.nombre);
+    buscarEmpleados();
+  }
+}, []);</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>📄 Paso 6: Formulario controlado</h2>
+    <p>Inputs ligados al estado con errores visuales condicionales:</p>
+    <pre><code class="language-tsx">&lt;input value={nif} onChange={(e) =&gt; setNif(e.target.value)} ref={inputNifRef} /&gt;
+{errorNif &amp;&amp; &lt;span style={{ color: "red" }}&gt;{errorNif}&lt;/span&gt;}
+
+&lt;input value={nivel} onChange={(e) =&gt; setNivel(Number(e.target.value))} ref={inputNivelRef} /&gt;
+{errorNivel &amp;&amp; &lt;span style={{ color: "red" }}&gt;{errorNivel}&lt;/span&gt;}</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>📊 Paso 7: Renderizar tabla con enlaces</h2>
+    <p>Incluye navegación con query string:</p>
+    <pre><code class="language-tsx">&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th&gt;NIF&lt;/th&gt;&lt;th&gt;Grupo&lt;/th&gt;&lt;th&gt;Nivel&lt;/th&gt;&lt;th&gt;Nombre&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    {empleados.map((emp) =&gt; (
+      &lt;tr key={emp.nif}&gt;
+        &lt;td&gt;&lt;Link to={`../DetalleEmpleado?nif=${emp.nif}`}&gt;{emp.nif}&lt;/Link&gt;&lt;/td&gt;
+        &lt;td&gt;{emp.grupo}&lt;/td&gt;
+        &lt;td&gt;{emp.nivel}&lt;/td&gt;
+        &lt;td&gt;{emp.nombre}&lt;/td&gt;
+      &lt;/tr&gt;
+    ))}
+  &lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>🔁 Paso 8: Botones de acción</h2>
+    <p><strong>Buscar</strong>, <strong>Limpiar</strong> y <strong>Nuevo Empleado</strong>:</p>
+    <pre><code class="language-tsx">&lt;button onClick={buscarEmpleados}&gt;Buscar&lt;/button&gt;
+&lt;button onClick={limpiarCampos}&gt;Limpiar&lt;/button&gt;
+&lt;button onClick={() =&gt; navigate("../NuevoEmpleado")}&gt;Nuevo Empleado&lt;/button&gt;</code></pre>
+  </div>
+
+  <!-- Prism.js + TSX fix -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js"></script>
+</body>
+</html>

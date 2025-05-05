@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ejemplo: QueryForm + Detalle con React</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; background: #f9f9f9; }
+    h1, h2 { color: #2c3e50; }
+    pre { background: #f4f4f4; padding: 1rem; border-radius: 5px; overflow-x: auto; }
+    code { font-family: Consolas, monospace; }
+    .explicacion { margin-bottom: 2rem; }
+    a { color: #007acc; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <h1>Ejemplo completo: Buscador con Query + Vista Detalle</h1>
+
+  <div class="explicacion">
+    <h2>1. Objetivo</h2>
+    <p>Construir un formulario de búsqueda con resultados en tabla (<code>QueryForm</code>) y permitir navegar al detalle de una fila seleccionada. Se usan:</p>
+    <ul>
+      <li><code>QueryForm</code>: componente visual para búsquedas</li>
+      <li><code>useNavigate</code> y <code>useLocation</code> de React Router</li>
+      <li><code>OutputData</code> para mostrar los datos seleccionados</li>
+    </ul>
+  </div>
+
+  <div class="explicacion">
+    <h2>2. Crear el formulario con <code>QueryForm</code></h2>
+    <p>Define los campos, endpoint de búsqueda y cómo manejar el clic en una fila:</p>
+    <pre><code class="language-tsx">import { QueryForm, InputText, Utilidades } from '@dit/spad-rdit_library';
+import { useNavigate } from 'react-router-dom';
+
+const EjemploQueryForm = () =&gt; {
+  const navigate = useNavigate();
+
+  const formFields = [
+    { component: InputText, props: { id: "USUARIO" }, label: "Usuario =" },
+    { component: InputText, props: { id: "MODULO" }, label: "Módulo %" }
+  ];
+
+  const handleCellClick = (row) =&gt; {
+    navigate("../EjemploQueryDetalle", { state: row });
+  };
+
+  return (
+    &lt;QueryForm
+      title="Ejemplo de QueryForm"
+      idForm="idForm"
+      fields={formFields}
+      searchEndpoint={Utilidades.getUrl("/wlpl/ADHT-AUDT/LogIntranetQuery")}
+      configTable={{
+        id: "idTableQuery",
+        tableTitle: "Ejemplo de QueryForm"
+      }}
+      onClickCell={handleCellClick}
+    /&gt;
+  );
+};
+
+export default EjemploQueryForm;</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>3. Crear la pantalla de detalle con <code>useLocation</code></h2>
+    <p>El detalle se construye leyendo los datos desde el estado de navegación.</p>
+    <p>Cada campo se representa con un componente <code>OutputData</code>.</p>
+    <pre><code class="language-tsx">import { Fragment } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { ActionBar, OutputData } from '@dit/spad-rdit_library';
+
+const EjemploQueryDetalle = () =&gt; {
+  const { state } = useLocation();
+  const navigate = useNavigate();
+
+  return (
+    &lt;&gt;
+      &lt;ActionBar&gt;
+        &lt;ActionBar.Item label="Volver" value="Volver" onClick={() =&gt; navigate(-1)} /&gt;
+      &lt;/ActionBar&gt;
+      &lt;h1&gt;Detalle&lt;/h1&gt;
+      {Object.keys(state).map((key) =&gt; (
+        &lt;Fragment key={key}&gt;
+          &lt;br /&gt;
+          &lt;OutputData literal={key} valor={state[key].value} /&gt;
+        &lt;/Fragment&gt;
+      ))}
+    &lt;/&gt;
+  );
+};
+
+export default EjemploQueryDetalle;</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>4. Pasos para integrar en la aplicación</h2>
+    <ol>
+      <li>Importa ambos componentes en tu sistema de rutas con React Router:</li>
+      <pre><code class="language-tsx">&lt;Routes&gt;
+  &lt;Route path="/EjemploQueryForm" element={&lt;EjemploQueryForm /&gt;} /&gt;
+  &lt;Route path="/EjemploQueryDetalle" element={&lt;EjemploQueryDetalle /&gt;} /&gt;
+&lt;/Routes&gt;</code></pre>
+
+      <li>Visita <code>/EjemploQueryForm</code> para realizar una búsqueda.</li>
+      <li>Haz clic en cualquier fila para navegar al detalle.</li>
+    </ol>
+  </div>
+
+  <div class="explicacion">
+    <h2>5. Buenas prácticas</h2>
+    <ul>
+      <li>Valida que <code>state</code> en <code>useLocation()</code> no sea <code>null</code>.</li>
+      <li>Evita usar índices como <code>key</code> si hay identificadores únicos.</li>
+      <li>Haz <code>encodeURIComponent</code> si vas a construir rutas dinámicas con parámetros en vez de estado.</li>
+    </ul>
+  </div>
+
+  <!-- Prism.js para colores -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Guía JSX - Curso React</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background: #f9f9f9;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 1rem;
+      border-radius: 5px;
+    }
+    .explicacion {
+      margin-bottom: 2rem;
+    }
+    p {
+      margin-bottom: 0.5rem;
+    }
+    a {
+      color: #007acc;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Guía JSX - Curso React</h1>
+
+  <div class="explicacion">
+    <h2>Uso de variables y expresiones</h2>
+    <p>En JSX puedes usar cualquier expresión JavaScript encerrándola entre <code>{ }</code>. Esto incluye variables, objetos, funciones, interpolación de cadenas, etc.</p>
+    <p>Es importante que las expresiones devuelvan algo renderizable (número, cadena, componente, etc.).</p>
+    <p><strong>Más información:</strong> <a href="https://react.dev/learn/writing-markup-with-jsx#embedding-expressions-in-jsx" target="_blank">Expresiones en JSX</a></p>
+    <pre><code class="language-jsx">const nombre = "Fernando";
+const numero = 42;
+const usuario = {
+  nombre: "Juan",
+  apellido: "Pérez",
+};
+const getTexto = (texto) =&gt; texto.toUpperCase();
+
+&lt;h2&gt;Hola {nombre}!&lt;/h2&gt;
+&lt;p&gt;El número es: {numero}&lt;/p&gt;
+&lt;p&gt;Usuario: {JSON.stringify(usuario)}&lt;/p&gt;
+&lt;p&gt;Nombre completo: {usuario.nombre} {usuario.apellido}&lt;/p&gt;
+&lt;p&gt;Templates: {`Nombre: ${usuario.nombre} Apellidos: ${usuario.apellido}`}&lt;/p&gt;
+&lt;p&gt;Texto en mayúsculas: {getTexto("texto")}&lt;/p&gt;
+&lt;p&gt;NIF Aleatorio: {generarNifAleatorio()}&lt;/p&gt;
+</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Estilos en línea</h2>
+    <p>Los estilos en JSX se definen como objetos de JavaScript, donde las propiedades CSS están en <em>camelCase</em> y los valores deben ser cadenas o números.</p>
+    <p><strong>Más información:</strong> <a href="https://react.dev/learn/passing-props-to-a-component#passing-a-style-object" target="_blank">Estilos en línea en React</a></p>
+    <pre><code class="language-jsx">const estiloEnLinea = {
+  color: "blue",
+  fontSize: "30px",
+  fontWeight: "bold",
+};
+
+&lt;p style={estiloEnLinea}&gt;Este es un texto con estilos en línea.&lt;/p&gt;</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Clases CSS en JSX</h2>
+    <p>En lugar de <code>class</code> como en HTML, en JSX debes usar <code>className</code> para aplicar clases CSS, ya que <code>class</code> es una palabra reservada en JavaScript.</p>
+    <p><strong>Más información:</strong> <a href="https://react.dev/learn/conditional-rendering#rendering-different-jsx-markup" target="_blank">Atributos JSX</a></p>
+    <pre><code class="language-jsx">&lt;p className="text-danger"&gt;
+  Este es un texto con clase CSS.
+&lt;/p&gt;</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Fragmentos JSX</h2>
+    <p>Un componente debe devolver un único elemento padre. Si necesitas agrupar varios sin añadir nodos extra al DOM, puedes usar <code>&lt;React.Fragment&gt;</code> o simplemente <code>&lt;&gt;</code>.</p>
+    <p><strong>Más información:</strong> <a href="https://react.dev/learn/rendering-lists#rendering-multiple-elements" target="_blank">Fragmentos en React</a></p>
+    <pre><code class="language-jsx">&lt;React.Fragment&gt;
+  &lt;h2&gt;Encabezado dentro de un Fragment&lt;/h2&gt;
+  &lt;p&gt;Esto forma parte del mismo Fragment.&lt;/p&gt;
+&lt;/React.Fragment&gt;</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Comentarios en JSX</h2>
+    <p>Para comentar dentro del retorno JSX, se usan llaves <code>{/* */}</code>. Fuera de JSX, los comentarios son como en JavaScript (<code>//</code> o <code>/* */</code>).</p>
+    <pre><code class="language-jsx">{/* Esto es un comentario en JSX */}</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Condicional simple con operador ternario</h2>
+    <p>Para mostrar contenido diferente según una condición, puedes usar el operador ternario <code>{condición ? A : B}</code>.</p>
+    <p>Esto es útil para alternar contenido visible dentro de JSX.</p>
+    <p><strong>Más información:</strong> <a href="https://react.dev/learn/conditional-rendering" target="_blank">Renderizado condicional</a></p>
+    <pre><code class="language-jsx">const usuarioConectado = false;
+
+&lt;p style={{ color: usuarioConectado ? "green" : "red" }}&gt;
+  Usuario conectado: {usuarioConectado ? "Sí" : "No"}
+&lt;/p&gt;</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Renderizado condicional con &amp;&amp;</h2>
+    <p>Si solo quieres mostrar algo cuando se cumpla una condición, puedes usar el operador lógico <code>&amp;&amp;</code> como atajo para un “if”.</p>
+    <pre><code class="language-jsx">{usuarioConectado &amp;&amp; &lt;p&gt;Usuario Conectado!&lt;/p&gt;}</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Inclusión de otros componentes</h2>
+    <p>En React, puedes dividir la interfaz en componentes reutilizables. Aquí vemos un componente declarado de forma tradicional y otro con sintaxis simplificada (función flecha de una línea).</p>
+    <p><strong>Más información:</strong> <a href="https://react.dev/learn/your-first-component" target="_blank">Crear componentes en React</a></p>
+    <pre><code class="language-jsx">const OtroComponente = () =&gt; {
+  return &lt;p&gt;Contenido de otro componente&lt;/p&gt;;
+};
+
+const OtroComponenteSimplicado = () =&gt;
+  &lt;p&gt;Contenido de otro componente simplificado&lt;/p&gt;;
+
+&lt;OtroComponente /&gt;
+&lt;OtroComponenteSimplicado /&gt;</code></pre>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js"></script>
+</body>
+</html>

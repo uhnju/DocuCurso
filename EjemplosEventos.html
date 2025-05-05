@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Manejo de Eventos en React</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background: #f9f9f9;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 1rem;
+      border-radius: 5px;
+    }
+    .explicacion {
+      margin-bottom: 2rem;
+    }
+    p {
+      margin-bottom: 0.5rem;
+    }
+    a {
+      color: #007acc;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Ejemplos de Manejo de Eventos en React</h1>
+
+  <div class="explicacion">
+    <h2>Manejar eventos de clic</h2>
+    <p>El evento <code>onClick</code> se usa para ejecutar una función cuando el usuario hace clic sobre un elemento (botón, enlace, etc.).</p>
+    <p>En React, puedes definir la función manejadora en el mismo componente.</p>
+    <p><strong>Más información:</strong> <a href="https://react.dev/learn/responding-to-events" target="_blank">Manejo de eventos en React</a></p>
+    <pre><code class="language-jsx">const handleClick = () =&gt; alert("¡Botón pulsado!");
+
+return (
+  &lt;button onClick={handleClick}&gt;Haz clic aquí&lt;/button&gt;
+);</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Evento de cambio en input</h2>
+    <p>El evento <code>onChange</code> se dispara cuando el valor de un input cambia. En React, se accede al valor mediante <code>e.target.value</code>.</p>
+    <pre><code class="language-jsx">const handleChange = (e) =&gt; console.log("Texto:", e.target.value);
+
+return (
+  &lt;input
+    type="text"
+    placeholder="Escribe algo"
+    onChange={handleChange}
+  /&gt;
+);</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Manejo de eventos de teclado</h2>
+    <p>El evento <code>onKeyDown</code> se activa al presionar una tecla. Puedes capturar qué tecla se presionó usando <code>e.key</code>.</p>
+    <pre><code class="language-jsx">const handleKeyDown = (e) =&gt; alert(`Tecla presionada: ${e.key}`);
+
+return (
+  &lt;input
+    type="text"
+    placeholder="Presiona una tecla"
+    onKeyDown={handleKeyDown}
+  /&gt;
+);</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Enfoque y desenfoque</h2>
+    <p><code>onFocus</code> se activa cuando el elemento recibe el foco (clic o tabulación), y <code>onBlur</code> cuando lo pierde.</p>
+    <p>Son útiles para validaciones o efectos visuales al interactuar con inputs.</p>
+    <pre><code class="language-jsx">const handleFocus = () =&gt; console.log("Input con foco");
+const handleBlur = () =&gt; console.log("Input sin foco");
+
+return (
+  &lt;input
+    type="text"
+    placeholder="Haz foco aquí"
+    onFocus={handleFocus}
+    onBlur={handleBlur}
+  /&gt;
+);</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Cambio en un &lt;select&gt;</h2>
+    <p>El evento <code>onChange</code> también se usa para capturar cambios en listas desplegables <code>&lt;select&gt;</code>. Se accede al valor seleccionado con <code>e.target.value</code>.</p>
+    <pre><code class="language-jsx">const handleSelectChange = (e) =&gt; console.log("Seleccionado:", e.target.value);
+
+return (
+  &lt;select onChange={handleSelectChange}&gt;
+    &lt;option value=""&gt;Selecciona una opción&lt;/option&gt;
+    &lt;option value="opcion1"&gt;Opción 1&lt;/option&gt;
+    &lt;option value="opcion2"&gt;Opción 2&lt;/option&gt;
+  &lt;/select&gt;
+);</code></pre>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js"></script>
+</body>
+</html>

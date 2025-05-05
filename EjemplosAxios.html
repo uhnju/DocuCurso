@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ejemplo de uso de Axios en React</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; background: #f9f9f9; }
+    h1, h2 { color: #2c3e50; }
+    pre { background: #f4f4f4; padding: 1rem; border-radius: 5px; overflow-x: auto; }
+    .explicacion { margin-bottom: 2rem; }
+    a { color: #007acc; text-decoration: none; }
+    code { font-family: Consolas, monospace; }
+  </style>
+</head>
+<body>
+  <h1>Ejemplo de llamadas HTTP con Axios en React</h1>
+
+  <div class="explicacion">
+    <h2>¿Qué es Axios?</h2>
+    <p><a href="https://axios-http.com" target="_blank">Axios</a> es una librería basada en promesas para realizar peticiones HTTP desde el navegador o Node.js.</p>
+    <p>En este ejemplo se usa un wrapper llamado <code>axiosAPI</code> (parte de una librería interna), pero los principios aplican igualmente a <code>axios</code> estándar.</p>
+  </div>
+
+  <div class="explicacion">
+    <h2>GET con parámetros</h2>
+    <p>Se realiza una petición <code>GET</code> a una URL configurable. Si el resultado contiene un <code>status: "OK"</code>, se muestra la información. De lo contrario, se maneja el error.</p>
+    <pre><code class="language-tsx">const realizarPeticionGET = async () =&gt; {
+  try {
+    const params = { parametro: "valor" };
+    const data = await axiosAPI.get&lt;RespuestaJSON&gt;(url, params);
+    if (data.status === "OK") {
+      setDatos(data);
+    } else {
+      alert(data.mensaje);
+      setErrorPeticion(data.mensaje);
+    }
+  } catch (err) {
+    setErrorPeticion((err as Error).message);
+    setDatos(null);
+  }
+};</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>POST con FormData</h2>
+    <p>Se crea un objeto <code>FormData</code> para enviar datos tipo formulario. Es útil en peticiones con cuerpos más complejos o envío de archivos.</p>
+    <pre><code class="language-tsx">const realizarPeticionPOST = async () =&gt; {
+  const formData = new FormData();
+  formData.append("parametro", "valor");
+
+  try {
+    const data = await axiosAPI.post&lt;RespuestaJSON&gt;(url, formData);
+    setDatos(data);
+  } catch (err) {
+    setDatos(null);
+  }
+};</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Visualización de datos</h2>
+    <p>Se renderiza una lista de personas si la respuesta es válida. También se muestra JSON crudo para depuración.</p>
+    <pre><code class="language-tsx">{datos?.respuesta?.personas.map(({ nombre, edad, email, lenguajes }) =&gt; (
+  &lt;li key={nombre}&gt;
+    &lt;p&gt;&lt;strong&gt;Nombre:&lt;/strong&gt; {nombre}&lt;/p&gt;
+    &lt;p&gt;&lt;strong&gt;Edad:&lt;/strong&gt; {edad}&lt;/p&gt;
+    &lt;p&gt;&lt;strong&gt;Email:&lt;/strong&gt; {email}&lt;/p&gt;
+    &lt;p&gt;&lt;strong&gt;Lenguajes:&lt;/strong&gt; {lenguajes.join(", ")}&lt;/p&gt;
+  &lt;/li&gt;
+))}</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Errores y componentes visuales</h2>
+    <p>Si ocurre un error durante la petición, se muestra un <code>&lt;Alert&gt;</code> con el mensaje de error.</p>
+    <p>También se incluye un <code>&lt;InputText&gt;</code> para editar la URL de prueba.</p>
+  </div>
+
+  <!-- Prism -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js"></script>
+</body>
+</html>

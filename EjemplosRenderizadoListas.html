@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Renderizado de Listas en React</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background: #f9f9f9;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 1rem;
+      border-radius: 5px;
+    }
+    .explicacion {
+      margin-bottom: 2rem;
+    }
+    p {
+      margin-bottom: 0.5rem;
+    }
+    a {
+      color: #007acc;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Ejemplos de Renderizado de Listas en React</h1>
+
+  <div class="explicacion">
+    <h2>Lista simple de cadenas de texto</h2>
+    <p>La forma más básica de renderizar listas es utilizando el método <code>map()</code> sobre un array de strings. Es importante usar la propiedad <code>key</code> para ayudar a React a identificar cada elemento.</p>
+    <p><strong>Más información:</strong> <a href="https://react.dev/learn/rendering-lists" target="_blank">Renderizado de listas en React</a></p>
+    <pre><code class="language-jsx">const frutas = ["Manzana", "Banana", "Cereza", "Melocotón"];
+
+return (
+  &lt;ul&gt;
+    {frutas.map((fruta, index) =&gt; (
+      &lt;li key={index}&gt;{fruta}&lt;/li&gt;
+    ))}
+  &lt;/ul&gt;
+);</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Lista de objetos</h2>
+    <p>Cuando se trabaja con objetos, lo ideal es que cada objeto tenga un <code>id</code> único que se pueda usar como <code>key</code>. Esto mejora el rendimiento y evita advertencias de React.</p>
+    <pre><code class="language-jsx">const usuarios = [
+  { id: 1, nombre: "Juan" },
+  { id: 2, nombre: "María" },
+  { id: 3, nombre: "Carlos" },
+];
+
+return (
+  &lt;ul&gt;
+    {usuarios.map((usuario) =&gt; (
+      &lt;li key={usuario.id}&gt;{usuario.nombre}&lt;/li&gt;
+    ))}
+  &lt;/ul&gt;
+);</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Lista ordenada al renderizar</h2>
+    <p>Antes de mapear los elementos, puedes ordenarlos usando <code>sort()</code>. Es recomendable clonar el array con <code>slice()</code> para no mutar el original.</p>
+    <pre><code class="language-jsx">const frutas = ["Manzana", "Banana", "Cereza", "Melocotón"];
+
+return (
+  &lt;ul&gt;
+    {frutas
+      .slice()
+      .sort()
+      .map((fruta, index) =&gt; (
+        &lt;li key={index}&gt;{fruta}&lt;/li&gt;
+      ))}
+  &lt;/ul&gt;
+);</code></pre>
+  </div>
+
+  <div class="explicacion">
+    <h2>Filtrado de lista (números pares)</h2>
+    <p>El método <code>filter()</code> te permite mostrar solo ciertos elementos del array. En este caso, se filtran los números pares antes de renderizarlos.</p>
+    <p>Esto se puede combinar con <code>map()</code> en una sola cadena.</p>
+    <pre><code class="language-jsx">const numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+return (
+  &lt;ul&gt;
+    {numeros
+      .filter((n) =&gt; n % 2 === 0)
+      .map((n, index) =&gt; (
+        &lt;li key={index}&gt;{n}&lt;/li&gt;
+      ))}
+  &lt;/ul&gt;
+);</code></pre>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js"></script>
+</body>
+</html>
